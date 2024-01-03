@@ -3,6 +3,8 @@
     <div class="logo-wrap">
       <router-link :to="{ path: '/' }">
         <img :src="logo" class="logo" />
+        <h1 class="title"> 诊所管理系统 </h1>
+
         <!-- <span class="subTitle">基础版</span> -->
       </router-link>
     </div>

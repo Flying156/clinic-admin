@@ -1,7 +1,7 @@
 <template>
     <div class="form_box">
         <a-form :model="formModel" :rules="rules">
-        <p class="text">请使用手机号登录</p>
+        <p class="text">请使用用户名登录</p>
         <a-form-item name="username">
             <a-input
                 class="reset-input"
@@ -26,11 +26,9 @@
           </template>
         </a-input>
       </a-form-item>
-      <a-form-item name="verCode">
+      <a-form-item name="verCode" class="code-container">
         <a-input   class="reset-input"
-          v-model:value="formModel.code"
-        >
-        </a-input>
+          v-model:value="formModel.code"/>
         <img alt="验证码" id="codeImg" :src="url.code">
       </a-form-item>
         <a-form-item>
@@ -44,8 +42,9 @@
 <script setup lang="ts">
 
 import { ref, reactive, onMounted } from 'vue';
-import { post, get } from '@/utils/request';
+import axiosInstance, { get } from '@/utils/request';
 import router from '@/router';
+import { useUserStore } from '@/store/user';
 
 const loading = ref(false);
 const url: ImgModel = reactive({
@@ -76,6 +75,8 @@ const getImgUrl = async () => {
     url.uuid = response.data.uuid;
 }
 
+const userStore = useUserStore();
+
 
 const login = async () => {
     const data = {
@@ -84,20 +85,19 @@ const login = async () => {
         code: formModel.code,
         uuid: url.uuid
     };
-    console.log(data);
-    try {
-        const response = await post<string>('/api/login',data,
+    axiosInstance.post('/api/login', data,
         {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             }
+        }).then((response) => {
+            if (response.data.flag) {
+                userStore.setToken(response.headers['authorization']);
+                userStore.setUsername(data.username);
+                router.replace('/app');
+            }
         });
-        if(response.flag)
-            router.replace('/app');
-    } catch (error) {
-        console.error(error);
-    }
-}
+};
 
 onMounted(() => {
     getImgUrl();
@@ -156,5 +156,14 @@ onMounted(() => {
       color: #999999;
       opacity: 0.85;
     }
-  }
+
+
+}
+    .code-container {
+        display: flex; // 将容器变成内联 Flex 容器
+        align-items: center; // 垂直居中
+    }
+    #codeImg {
+        height: 50px; // 根据需要设置高度
+    }
 </style>

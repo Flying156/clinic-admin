@@ -3,8 +3,12 @@
     <a-dropdown placement="bottom">
       <template #overlay>
         <a-menu class="menu-box">
-          <a-menu-item>
-          </a-menu-item>
+            <a-menu-item v-for="item in navs" :key="item.path" @click="handleRoute(item?.path)">
+                <template #icon>
+                    <Icon align="1px" size="20px" :type="item.icon" />
+                </template>
+                <span>{{ item.name }}</span>
+            </a-menu-item>
         </a-menu>
       </template>
       <Space class="wrap" align="baseline" direction="horizontal">
@@ -17,7 +21,20 @@
 </template>
 
 <script setup lang="ts">
-  import { Space } from 'ant-design-vue';
+import { Space } from 'ant-design-vue';
+import { navs as myNavs } from './constant';
+import { ref } from 'vue';
+import { useUserStore } from '@/store/user';
+import router from '@/router';
+
+const navs = ref(myNavs);
+const store = useUserStore();
+
+const handleRoute = (path?: string) => {
+    if (path) return router.push(path);
+    // 退出登录
+    store.logout();
+};
 </script>
 
 <style lang="less" scoped>

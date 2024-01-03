@@ -17,6 +17,7 @@
                         :scroll="{ x: 1000 }"
                         :pagination="pagination"
                         :loading="loading"
+                        style="margin-top:20px"
                         @change="handleTableChange"
                         
                         table-layout="auto" >
