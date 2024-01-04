@@ -23,11 +23,15 @@ export const columns = [
         title : '数量',
         dataIndex : 'quantity',
         key : 'quantity',
+        sorter : (a: number, b: number) => a.quantity - b.quantity,
+
     },
     {
         title : '价格',
         dataIndex : 'price',
         key : 'price',
+        sorter : (a: number, b: number) => a.price - b.price,
+
     },
     {
         title : '生产日期',

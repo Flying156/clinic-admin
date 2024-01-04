@@ -42,6 +42,8 @@ export const useUserStore = defineStore({
         async logout() {
             this.resetState();
             router.replace('/login');
+            localStorage.setItem('piniaState', {});
+
             // 路由表重置
             location.reload();
         },

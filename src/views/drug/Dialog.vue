@@ -1,53 +1,64 @@
 <template>
- <a-modal
-    title="药品信息"
-    :ok-text="componentDisabled ? '确定' : '提交'"
-    @ok="commit"
-    @cancel="close"
-    :visible="!componentDisabled">
+    <a-modal
+        title="药品信息"
+        :ok-text="componentDisabled ? '确定' : '提交'"
+        @ok="commit"
+        @cancel="close"
+        :visible="!componentDisabled">
 
-    <a-form
-    :label-col="labelCol"
-    :wrapper-col="wrapperCol"
-    layout="horizontal"
-    v-model:value="record"
-    :disabled="componentDisabled"
-    style="max-width: 600px"
-    :rules="rules"
-  >
-    <a-form-item label="药品名称" name="name">
-      <a-input v-model:value="record.name"/>
-    </a-form-item>
-    <a-form-item label="制造商" name="manufacturer">
-      <a-input v-model:value="record.manufacturer"/>
-    </a-form-item>
-    <a-form-item label="生产日期">
-      <a-date-picker
-        format="YYYY-MM-DD"
-        v-decorator="['time',{rules: [{ required: true, message: '请输入时间!' }]}]"
-        placeholder="请选择时间"
-      />
-    </a-form-item>
-    <a-form-item label="过期日期">
-    <a-date-picker
-        format="YYYY-MM-DD"
-        v-decorator="['time',{rules: [{ required: true, message: '请输入时间!' }]}]"
-        placeholder="请选择时间"
-        @change="onChange"
-        />
-    </a-form-item>
-    <a-form-item label="价格" name="price">
-      <a-input-number 
-            v-model:value="record.price" 
-            prefix="￥" 
-            :precision="2"
-            min="0.00"/>
-    </a-form-item>
-    <a-form-item label="药效" name="effect">
-      <a-textarea :rows="4" v-model:value="record.effect"/>
-    </a-form-item>
-  </a-form>
-</a-modal>
+            <a-form
+                :label-col="labelCol"
+                :wrapper-col="wrapperCol"
+                layout="horizontal"
+                v-model:value="record"
+                :disabled="componentDisabled"
+                style="max-width: 600px"
+                :rules="rules"
+            >
+            <a-form-item label="药品名称" name="name">
+                <a-input v-model:value="record.name"/>
+            </a-form-item>
+
+            <a-form-item label="制造商" name="manufacturer">
+                <a-input v-model:value="record.manufacturer"/>
+            </a-form-item>
+
+            <a-form-item label="生产日期">
+                <a-date-picker
+                    format="YYYY-MM-DD"
+                    v-decorator="['time',{rules: [{ required: true, message: '请输入时间!' }]}]"
+                    placeholder="请选择时间"
+                    />
+            </a-form-item>
+
+            <a-form-item label="过期日期">
+                <a-date-picker
+                    format="YYYY-MM-DD"
+                    v-decorator="['time',{rules: [{ required: true, message: '请输入时间!' }]}]"
+                    placeholder="请选择时间"
+                    @change="onChange"
+                    />
+            </a-form-item>
+
+            <a-form-item label="价格" name="price">
+                <a-input-number 
+                    v-model:value="record.price" 
+                    prefix="￥" 
+                    :precision="2"
+                    min="0.00"/>
+            </a-form-item>
+
+             <a-form-item label="数量" name="quantity">
+                <a-input-number 
+                    v-model:value="record.quantity"  
+                    min="0"/>
+            </a-form-item>
+
+            <a-form-item label="药效" name="effect">
+                <a-textarea :rows="4" v-model:value="record.effect"/>
+            </a-form-item>
+        </a-form>
+    </a-modal>
 </template>
 <script lang="ts" setup>
 import moment from "moment";

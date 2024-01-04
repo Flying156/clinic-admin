@@ -58,6 +58,17 @@ const routes = [
 
             },
             {
+                path : '/app/patient',
+                name : 'Patient',
+                meta : {
+                    title : '病人管理',
+                    keeyAlive : true,
+                    requireAuth : false
+                },
+                component : () => import('@/views/patient/index.vue')
+
+            },
+            {
                 path : '/sys/account',
                 name : 'account',
                 component : () => import('@/views/account/index.vue'),

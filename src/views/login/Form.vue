@@ -45,6 +45,7 @@ import { ref, reactive, onMounted } from 'vue';
 import axiosInstance, { get } from '@/utils/request';
 import router from '@/router';
 import { useUserStore } from '@/store/user';
+import {message as AntMessage} from 'ant-design-vue';
 
 const loading = ref(false);
 const url: ImgModel = reactive({
@@ -95,6 +96,7 @@ const login = async () => {
                 userStore.setToken(response.headers['authorization']);
                 userStore.setUsername(data.username);
                 router.replace('/app');
+                AntMessage.success("登录成功");
             }
         });
 };

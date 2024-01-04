@@ -23,7 +23,7 @@
   import img2 from '@/assets/images/Icon_trading.png';
   import img3 from '@/assets/images/Icon_contract.png';
   import img4 from '@/assets/images/Icon_node.png';
-  import { ref } from 'vue';
+  import { ref, onMounted } from 'vue';
 
   const data = ref([
     {
