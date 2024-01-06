@@ -52,7 +52,8 @@
 import Dialog from './Dialog.vue';
 import confirm from 'ant-design-vue/es/modal/confirm';
 import {QueryForm} from '@/interface/queryForm'
-import { reactive, onMounted, ref, computed} from 'vue';
+import { reactive, onMounted, ref, computed } from 'vue';
+import dayjs from 'dayjs';
 import { columns } from './option'
 import { Drug } from '@/interface/drug';
 import {formatToDateTime, formatToDate} from '@/utils/dateUtils'
@@ -160,8 +161,8 @@ const createNewDrug = (): Drug => {
         manufacturer: '',
         createTime: new Date(),
         updateTime: new Date(),
-        produceTime: new Date(),
-        expireTime: new Date(),
+        produceTime: dayjs('0000-00-00', 'yyyy-MM-dd'),
+        expireTime: dayjs('0000-00-00', 'yyyy-MM-dd'),
         name: '',
     };
 };

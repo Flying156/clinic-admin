@@ -11,6 +11,8 @@
       </a-col>
       <a-col :span="12">
         <a-card :bordered="false">
+            <TradingOverview
+            :loading="loading"/>
         </a-card>
       </a-col>
     </a-row>
@@ -18,11 +20,12 @@
   </div>
 </template>
 <script setup lang="ts">
-import DataOverview from './DataOverview.vue';
+import DataOverview from './components/DataOverview.vue';
+import TradingOverview from './components/TradingOverview.vue';
 
 import { ref, onMounted, onUnmounted } from 'vue'
 
-    const loading = ref(false);
+const loading = ref(false);
 
   onMounted(async () => {
     loading.value = true;

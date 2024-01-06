@@ -31,6 +31,7 @@ export const columns = [
         key : "操作",
         dataIndex : "operation",
         align : "center",
+        width : '300px',
 
     },
 ];

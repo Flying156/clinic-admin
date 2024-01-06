@@ -135,13 +135,14 @@ const handleTableChange = (pagination: { current: number; pageSize: number }) =>
 
 const updateEnabled = async (flag: boolean, record: User) => {
     if (flag) {
-        record.enabled = !record.enabled;
         const res = await put('/api/enabledUser', {
             username: record.username,
-            enabled: record.enabled
+            enabled: !record.enabled
         });
         if (res.flag) {
             getListData();
+            record.enabled = !record.enabled;
+            AntMessage.success("操作成功");
         }
     } else {
         currentRecord.value = record;

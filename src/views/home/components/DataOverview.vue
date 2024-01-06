@@ -10,7 +10,7 @@
         class="dataOverview_col"
       >
         <div> <img :src="item.img" alt="" /> </div>
-        <div>
+        <div >
           <h2>{{ item.value }}</h2>
           <p>{{ item.label }}</p>
         </div>
@@ -23,7 +23,8 @@
   import img2 from '@/assets/images/Icon_trading.png';
   import img3 from '@/assets/images/Icon_contract.png';
   import img4 from '@/assets/images/Icon_node.png';
-  import { ref, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
+import { get } from '@/utils/request';
 
   const data = ref([
     {
@@ -55,6 +56,26 @@
       bgColor: 'linear-gradient(90deg, #7E8BEC 0%, #C5AFF7 100%)',
     },
   ]);
+
+interface OverStatic{
+    doctorCount: number;
+    patientCount: number;
+    revenue: number;
+    drugCount: number;
+};
+// 获取数据
+const getOverData = async () => {
+    const res = await get<OverStatic>("/api/overStatic");
+    if (res.flag) {
+        data.value[1].value = res.data.drugCount;
+        data.value[2].value = res.data.patientCount;
+        data.value[3].value = res.data.revenue;
+    }
+};
+onMounted(() => {
+    getOverData();
+});
+
 </script>
 <style lang="less" scoped>
   .dataOverview {
@@ -75,6 +96,8 @@
         font-weight: bold;
         color: #ffffff;
         margin-bottom: 4px;
+        margin-left: 10px;  // Adjust the left margin as needed
+        margin-top: 5px;
       }
       p {
         margin: 0;
@@ -82,6 +105,7 @@
         font-family: Source Han Sans CN;
         font-weight: 300;
         color: #ffffff;
+        margin-left: 10px;
       }
     }
   }

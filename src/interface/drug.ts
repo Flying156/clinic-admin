@@ -1,3 +1,5 @@
+import {Dayjs} from "dayjs";
+
 export interface Drug {
     id: number;
     quantity: number;
@@ -6,7 +8,7 @@ export interface Drug {
     manufacturer: string;
     createTime: Date;
     updateTime: Date;
-    produceTime: Date;
-    expireTime: Date;
+    produceTime: Dayjs;
+    expireTime: Dayjs;
     name: string;
 }

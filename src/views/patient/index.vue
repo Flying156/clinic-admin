@@ -23,6 +23,7 @@
                 bordered>
                 <template #bodyCell="{ column, record}">
                     <template v-if="column.dataIndex==='operation'">
+                        <a-button type="dashed" danger class="action-button" @click="prescribeDrugs(record)">开药</a-button>
                         <a-button type="primary" class="action-button" @click="updatePatient(record)">编辑</a-button>
                         <a-button type="primary" danger class="action-button"  @click="remove(record)">删除</a-button>
                     </template>
@@ -38,12 +39,19 @@
         @child-click="closeDia"
     />
 
+    <DrugSel
+        v-if="visible"
+        @close-click="closeSel"
+        :record="patient!"
+    />
+
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted, reactive } from 'vue';
 import { columns } from './option.ts';
-import Dialog  from './components/Dialog.vue';
+import Dialog from './components/Dialog.vue';
+import DrugSel from './components/DrugSel.vue';
 import { Patient } from '@/interface/patient';
 import { QueryForm } from '@/interface/queryForm';
 import { get, del } from '@/utils/request';
@@ -55,6 +63,8 @@ const loading = ref(false);
 const isShow = ref(false);
 const patient = ref<Patient | null>(null);
 const flag = ref(false);
+const visible = ref(false);
+
 
 
 const data: { queryForm: QueryForm; query: string; total: number; FilteredData: Array<Patient> } = reactive({
@@ -100,6 +110,7 @@ const handleTableChange = (pagination: { current: number; pageSize: number }) =>
 };
 // 更新病人
 const updatePatient = (record: Patient) => {
+    flag.value = true;
     isShow.value = true;
     patient.value = record;
 };
@@ -130,7 +141,16 @@ const remove = async (record: Patient) => {
     });
 
 };
+const closeSel = (show : boolean) => {
+    visible.value = show;
+}
 
+const prescribeDrugs = (record: Patient) => {
+    visible.value = true;
+    patient.value = record;
+}
+
+// 关闭修改框
 const closeDia = () => {
     isShow.value = false;
     getListData();
@@ -145,7 +165,7 @@ const initPatient = ():Patient => {
         age: 0,
     };
 }
-
+// 挂载时调用函数
 onMounted(() => {
     getListData();
 });

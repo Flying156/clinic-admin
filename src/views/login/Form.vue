@@ -93,7 +93,7 @@ const login = async () => {
             }
         }).then((response) => {
             if (response.data.flag) {
-                userStore.setToken(response.headers['authorization']);
+                localStorage.setItem("authorization", response.headers['authorization']);
                 userStore.setUsername(data.username);
                 router.replace('/app');
                 AntMessage.success("登录成功");

@@ -96,14 +96,12 @@ const router
       });
 
 router.beforeEach((to, from, next) => {
-    if (to.name === 'login') {
+    if (to.name === 'Login') {
         next();
     }
-    // 假设你的 store 名为 userStore，根据实际情况修改
-    const userStore = useUserStore();
 
     // 如果用户没有 token 并且访问的不是登录页面，则重定向到登录页面
-    if (userStore.getToken === "" && to.path !== '/login') {
+    if (localStorage.getItem('authorization') === null && to.path !== '/login') {
         next('/login');
     } else {
         // 否则继续导航

@@ -26,17 +26,16 @@
             <a-form-item label="生产日期">
                 <a-date-picker
                     format="YYYY-MM-DD"
-                    v-decorator="['time',{rules: [{ required: true, message: '请输入时间!' }]}]"
                     placeholder="请选择时间"
+                    v-model:value="record.produceTime"
                     />
             </a-form-item>
 
             <a-form-item label="过期日期">
                 <a-date-picker
                     format="YYYY-MM-DD"
-                    v-decorator="['time',{rules: [{ required: true, message: '请输入时间!' }]}]"
                     placeholder="请选择时间"
-                    @change="onChange"
+                    v-model:value="record.expireTime"
                     />
             </a-form-item>
 
@@ -61,8 +60,6 @@
     </a-modal>
 </template>
 <script lang="ts" setup>
-import moment from "moment";
-import "moment/locale/zh-cn"
 import { ref, defineProps, defineEmits } from 'vue';
 import {Drug} from '@/interface/drug'
 import { post, put } from '@/utils/request';
