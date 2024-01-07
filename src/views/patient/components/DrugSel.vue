@@ -47,18 +47,6 @@
                 />
             </template>
         </a-transfer>
-        <a-switch
-        v-model:checked="disabled"
-        un-checked-children="disabled"
-        checked-children="disabled"
-        style="margin-top: 16px"
-        />
-        <a-switch
-        v-model:checked="showSearch"
-        un-checked-children="showSearch"
-        checked-children="showSearch"
-        style="margin-top: 16px"
-        />
     </a-modal>
 </template>
 <script lang="ts" setup>
@@ -67,6 +55,9 @@ import { get, post, put } from '@/utils/request';
 import { Page } from '@/interface/page';
 import { message as AntMessage } from 'ant-design-vue';
 import { Patient } from '@/interface/patient';
+import { useUserStore } from '@/store/user';
+
+const router = useUserStore();
 type tableColumn = Record<string, string>;
 const visiable = ref(true);
 const drugList: { filterData: Array<Drug> } = reactive({
@@ -139,19 +130,22 @@ const closeModal = () => {
 const commitSelect = async() => {
     const res = await post("/api/updateCount", targetKeys.value);
     if (res.flag) {
-        AntMessage.success("开药成功");
         // 提交开药记录
-        await put("/api/saveRecord", {
+        const ans = await put("/api/saveRecord", {
             patientID: props.record.id,
-            drugIDList: targetKeys.value
+            drugIDList: targetKeys.value,
+            username: router.getUsername,
         });
+        if (ans.flag) {
+            AntMessage.success("开药成功");
+        }
     }
     closeModal();
 }
 
 const targetKeys = ref<number[]>(originTargetKeys);
 const disabled = ref<boolean>(false);
-const showSearch = ref<boolean>(false);
+const showSearch = ref<boolean>(true);
 const leftColumns = ref<tableColumn[]>(leftTableColumns);
 const rightColumns = ref<tableColumn[]>(rightTableColumns);
 

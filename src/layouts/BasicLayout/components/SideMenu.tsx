@@ -2,7 +2,8 @@ import { Layout, Menu, Space } from 'ant-design-vue';
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons-vue';
 import { PropType, h, Transition } from 'vue';
 import { MenuDataItem } from '../utils/typings';
-import  router from '@/router';
+import router from '@/router';
+import Icon from '@/components/Icon/index.vue';
 import { defineComponent, reactive, watchEffect } from 'vue';
 import './index.less';
 
@@ -28,7 +29,7 @@ export default defineComponent({
       openKeys: [],
       selectedKeys: [],
     });
-
+      
     watchEffect(() => {
       if (router.currentRoute) {
         const matched = router.currentRoute.value.matched.concat();
@@ -38,6 +39,9 @@ export default defineComponent({
           .map((r) => r.path);
       }
     });
+      
+    const getIcon = (type?: string) =>
+      type ? <Icon type={type} className="sideMenu-icon" /> : null;
 
     const onSelect = (e: { key: string; item: { props: { routeid: number } } } | any) => {
       router.push(e.key);
@@ -63,7 +67,8 @@ export default defineComponent({
           );
         }
         return (
-          <Menu.Item key={item.path}>
+            <Menu.Item key={item.path}>
+            {getIcon(item.meta?.icon as string)}
             <span>{item.meta?.title}</span>
           </Menu.Item>
         );

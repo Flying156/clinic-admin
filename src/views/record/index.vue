@@ -1,16 +1,15 @@
 <template>
     <div class="drug">
         <a-card >
-            <a-row :gutter="20">
-                <a-col :span="7"  style="margin-right: -25px; ">
+            <a-row :gutter="20" class="input-row">
+                <a-col :span="7" class="input-col">
                     <a-input
                         v-model:value="data.query"
+                        class="input-box"
                         placeholder="请输入用户名查询"
-                         style="border-radius: 0px; "
                     ></a-input>
                 </a-col>
                 <a-button style="width: 100px; height: 30px" class="search_btn" type="primary" @click="getListData">查询</a-button>
-                <a-button @click="addPatient" style="width: 100px; height: 30px" class="search_btn" type="primary">新增</a-button>
             </a-row>
             <!--表单-->
              <a-table 
@@ -20,59 +19,45 @@
                 :loading="loading"
                 :scroll="{ x: 1000 }"
                 style="margin-top:20px"
+                @change="handleTableChange"
+
                 :class="['ant-table-striped', { border: hasBordered }]"
                 :rowClassName="(_, index) => (index % 2 === 1 ? 'table-striped' : '')"
-
-                @change="handleTableChange"
                 table-layout="auto" >
                 bordered>
+
+                <template #createTime="{text}">
+                     {{ formatDate(text) }}
+                </template>
                 <template #bodyCell="{ column, record}">
                     <template v-if="column.dataIndex==='operation'">
-                        <a-button type="dashed" danger class="action-button" @click="prescribeDrugs(record)">开药</a-button>
-                        <a-button type="primary" class="action-button" @click="updatePatient(record)">编辑</a-button>
-                        <a-button type="primary" danger class="action-button"  @click="remove(record)">删除</a-button>
+                        <a-button type="primary" danger class="action-button" @click="remove(record)" >删除</a-button>
                     </template>
                 </template>
             </a-table>
         </a-card>
     </div>
 
-    <Dialog
-        v-if="isShow"
-        :record="patient!"
-        :isPost="flag"
-        @child-click="closeDia"
-    />
-
-    <DrugSel
-        v-if="visible"
-        @close-click="closeSel"
-        :record="patient!"
-    />
 
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted, reactive } from 'vue';
 import { columns } from './option.ts';
-import Dialog from './components/Dialog.vue';
-import DrugSel from './components/DrugSel.vue';
-import { Patient } from '@/interface/patient';
+import { Record } from '@/interface/record';
 import { QueryForm } from '@/interface/queryForm';
 import { get, del } from '@/utils/request';
 import { Page } from '@/interface/page';
 import confirm from 'ant-design-vue/es/modal/confirm';
-import {message as AntMessage} from 'ant-design-vue';
+import { message as AntMessage } from 'ant-design-vue';
+import {formatToDateTime, formatToDate} from '@/utils/dateUtils'
+
 
 const loading = ref(false);
-const isShow = ref(false);
-const patient = ref<Patient | null>(null);
-const flag = ref(false);
-const visible = ref(false);
 
 
 
-const data: { queryForm: QueryForm; query: string; total: number; FilteredData: Array<Patient> } = reactive({
+const data: { queryForm: QueryForm; query: string; total: number; FilteredData: Array<Record> } = reactive({
     queryForm: {
         pageSize: 10,
         currentPage: 1,
@@ -97,8 +82,8 @@ const pagination = computed(() => ({
 // 获取数据
 const getListData = async () => {
     loading.value = true;
-    const res = await get<Page<Patient>>("/api/getAllPatient", {
-        name: data.query,
+    const res = await get<Page<Record>>("/api/getRecord", {
+        patientName: data.query,
         current: data.queryForm.currentPage,
         size: data.queryForm.pageSize
     });
@@ -107,26 +92,21 @@ const getListData = async () => {
     loading.value = false;
 
 };
+
+// 格式化日期数据
+const formatDate = (val: string, type: 'date' | 'time' = 'date') => {
+    const formatFn = type === 'date' ? formatToDate : formatToDateTime;
+    return val.length === 10 ? formatFn(Number(val) * 1000) : formatFn(val);
+};
 // 换页
 const handleTableChange = (pagination: { current: number; pageSize: number }) => {
     data.queryForm.currentPage = pagination.current;
     data.queryForm.pageSize = pagination.pageSize;
     getListData();
 };
-// 更新病人
-const updatePatient = (record: Patient) => {
-    flag.value = true;
-    isShow.value = true;
-    patient.value = record;
-};
-// 新增病人
-const addPatient = () => {
-    isShow.value = true;
-    patient.value = initPatient();
-    flag.value = false;
-};
+
 // 删除
-const remove = async (record: Patient) => {
+const remove = async (record: Record) => {
 
     confirm({
         title: "确定删除?",
@@ -134,7 +114,7 @@ const remove = async (record: Patient) => {
         okText: "确定",
         cancelText: "取消",
         onOk: async () => {
-            const res = await del('/api/deletePatient', {
+            const res = await del('/api/deleteRecord', {
             id: record.id
             });
             if (res.flag) {
@@ -146,30 +126,6 @@ const remove = async (record: Patient) => {
     });
 
 };
-const closeSel = (show : boolean) => {
-    visible.value = show;
-}
-
-const prescribeDrugs = (record: Patient) => {
-    visible.value = true;
-    patient.value = record;
-}
-
-// 关闭修改框
-const closeDia = () => {
-    isShow.value = false;
-    getListData();
-};
-
-const initPatient = ():Patient => {
-    return {
-        id: 0,
-        name: '',
-        gender: '',
-        disease: '',
-        age: 0,
-    };
-}
 // 挂载时调用函数
 onMounted(() => {
     getListData();
@@ -178,11 +134,22 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.input-row {
+  margin-bottom: 20px; /* 调整输入框和按钮之间的垂直间距 */
+}
+
+.input-box {
+    border-radius: 0; /* 设置为0表示直角 */
+}
 .editable-row-operations a {
   margin-right: 8px;
 }
 .action-button {
+border-radius: 0; /* 设置为0表示直角 */
   margin-right: 8px; /* 设置右边距离 */
+}
+.input-col {
+  margin-right: -25px; /* 负的外边距将输入框的右边缘移动到按钮的左边缘 */
 }
 .Dia {
   position: absolute;
@@ -192,10 +159,11 @@ onMounted(() => {
 }
 .search_btn{
     margin-left: 15px;
-    width: 30px;
-    border-radius: 0px;
+     border-radius: 0;
+      width: auto; /* 自动调整按钮宽度以适应内容 */
+  padding: 0 15px; /* 可以根据需要调整按钮的内边距 */
+  height: 30px;
 }
-
   .ant-table-striped :deep(.table-striped) td {
     background-color: #fafafa;
   }

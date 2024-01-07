@@ -30,7 +30,6 @@
   </a-spin>
 </template>
 <script setup lang="ts">
-import avatar from '@/assets/images/avatar.png'; 
 import { User } from '@/interface/user';
 import { useUserStore } from '@/store/user';
 import { get, put } from '@/utils/request';

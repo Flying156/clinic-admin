@@ -2,10 +2,11 @@
     <div class="drug">
         <a-card >
             <a-row :gutter="20">
-                <a-col :span="7">
+                <a-col :span="7" style="margin-right: -25px; ">
                     <a-input
                         v-model:value="data.query"
                         placeholder="请输入药品名查询"
+                        style="border-radius: 0;"
                     ></a-input>
                 </a-col>
                 <a-button @click="getListData" style="width: 100px; height: 30px" class="search_btn" type="primary">查询</a-button>
@@ -14,6 +15,8 @@
             <!--表单-->
             <a-table :dataSource="data.FilteredData" 
                         :columns="columns"  
+                        :class="['ant-table-striped', { border: hasBordered }]"
+                         :rowClassName="(_, index) => (index % 2 === 1 ? 'table-striped' : '')"
                         :scroll="{ x: 1000 }"
                         :pagination="pagination"
                         :loading="loading"
@@ -182,5 +185,24 @@ const createNewDrug = (): Drug => {
 }
 .search_btn{
     margin-left: 15px;
+    border-radius: 0;
 }
+
+  .ant-table-striped :deep(.table-striped) td {
+    background-color: #fafafa;
+  }
+  .ant-table-striped :deep(.ant-table-pagination.ant-pagination) {
+    margin: 30px auto;
+    width: 100%;
+    text-align: center;
+    .ant-pagination-prev,
+    .ant-pagination-next {
+      .anticon {
+        vertical-align: 1.5px;
+      }
+    }
+  }
+  .border {
+    border: 0.5px solid rgba(210, 210, 210, 0.5);
+  }
 </style>

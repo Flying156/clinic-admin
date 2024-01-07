@@ -11,7 +11,7 @@
             </a-menu-item>
         </a-menu>
       </template>
-      <Space class="wrap" align="baseline" direction="horizontal">
+      <Space class="wrap" align="baseline" direction="horizontal" >
         <Icon align="2px" type="xitongshezhi" />
         <span class="setting">系统设置</span>
         <Icon align="2px" type="xialajiantou" />
@@ -25,6 +25,7 @@ import { Space } from 'ant-design-vue';
 import { navs as myNavs } from './constant';
 import { ref } from 'vue';
 import { useUserStore } from '@/store/user';
+import  Icon from '@/components/Icon/index.vue';
 import router from '@/router';
 
 const navs = ref(myNavs);

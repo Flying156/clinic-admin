@@ -1,4 +1,5 @@
 import '@/styles/index.less';
+import 'sanitize.css';
 
 import * as Icons from '@ant-design/icons-vue';
 import Antd from "ant-design-vue";

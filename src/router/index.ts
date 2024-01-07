@@ -31,6 +31,7 @@ const routes = [
                 meta : {
                     title : '主页',
                     keeyAlive : true,
+                    icon : 'liulanqi',
                     requireAuth : false
                 },
                 component : () => import('@/views/home/index.vue')
@@ -42,9 +43,21 @@ const routes = [
                 meta : {
                     title : '药品管理',
                     keeyAlive : true,
+                    icon : 'jiedianguanli',
                     requireAuth : false
                 },
                 component : () => import('@/views/drug/index.vue')
+            },
+            {
+                path : '/app/role',
+                name : 'Role',
+                meta : {
+                    title : '角色管理',
+                    keeyAlive : true,
+                    icon : 'rili',
+                    requireAuth : false
+                },
+                component : () => import('@/views/role/index.vue')
             },
             {
                 path : '/app/user',
@@ -52,10 +65,22 @@ const routes = [
                 meta : {
                     title : '用户管理',
                     keeyAlive : true,
+                    icon : 'rili',
                     requireAuth : false
                 },
                 component : () => import('@/views/user/index.vue')
 
+            },
+            {
+                path : '/app/record',
+                name : 'record',
+                meta : {
+                    title : '开药记录',
+                    keeyAlive : true,
+                    icon : 'rili',
+                    requireAuth : false
+                },
+                component : () => import('@/views/record/index.vue')
             },
             {
                 path : '/app/patient',
@@ -63,6 +88,7 @@ const routes = [
                 meta : {
                     title : '病人管理',
                     keeyAlive : true,
+                    icon : 'jiedianguanli',
                     requireAuth : false
                 },
                 component : () => import('@/views/patient/index.vue')
@@ -72,7 +98,12 @@ const routes = [
                 path : '/sys/account',
                 name : 'account',
                 component : () => import('@/views/account/index.vue'),
-                meta : { title : '用户管理', keepAlive : true, breadcrumb : true },
+                meta : {
+                    title : '用户管理',
+                    keepAlive : true,
+                    breadcrumb : true,
+
+                },
             },
         ]
     },
