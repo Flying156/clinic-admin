@@ -27,16 +27,14 @@
         </a-input>
       </a-form-item>
         <p class="text">请输入验证码</p>
-      <a-form-item name="verCode" class="code-container" >
-          <a-col style="width:200px  display: inline-block;">
-                <a-input class="reset-input" v-model:value="formModel.code" >
-                    <template #prefix>
-                        <!-- <lock-outlined class="icon" /> -->
-                        <Icon size="24px" type="shurumimadenglu" class="icon" />
-                    </template>
-                </a-input>
-                <img alt="验证码" id="codeImg" :src="url.code" @click="getImgUrl" style="vertical-align:middle;">
-            </a-col>
+      <a-form-item name="verCode"  style="display: flex; align-items: center;">
+            <a-input class="reset-input" v-model:value="formModel.code" style="vertical-align:middle; width: 200px;">
+                <template #prefix>
+                    <!-- <lock-outlined class="icon" /> -->
+                    <Icon size="24px" type="shurumimadenglu" class="icon" />
+                </template>
+            </a-input>
+            <img alt="验证码" class="reset-input" :src="url.code" @click="getImgUrl" style="vertical-align:middle; margin-left:10px"/>
       </a-form-item>
         <a-form-item>
             <a-button html-type="submit" class="btn" :loading="loading" @click="login">立即登录</a-button>
@@ -171,7 +169,5 @@ onMounted(() => {
       color: #999999;
       opacity: 0.85;
     }
-
-
 }
 </style>
