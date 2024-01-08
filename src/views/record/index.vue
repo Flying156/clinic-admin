@@ -6,7 +6,7 @@
                     <a-input
                         v-model:value="data.query"
                         class="input-box"
-                        placeholder="请输入用户名查询"
+                        placeholder="请输入病人姓名名查询"
                     ></a-input>
                 </a-col>
                 <a-button style="width: 100px; height: 30px" class="search_btn" type="primary" @click="getListData">查询</a-button>

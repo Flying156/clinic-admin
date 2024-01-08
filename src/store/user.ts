@@ -23,6 +23,7 @@ export const useUserStore = defineStore({
             return this.username;
         },
     },
+    persist : true,
     actions : {
         setToken(info: string) {
             this.token = info ?? '';
@@ -42,10 +43,9 @@ export const useUserStore = defineStore({
         async logout() {
             this.resetState();
             router.replace('/login');
-            localStorage.removeItem("authorization");
             // 路由表重置
-            location.reload();
         },
+
     },
 
 });

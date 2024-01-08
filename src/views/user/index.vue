@@ -67,10 +67,17 @@
                     </a-form-item>
 
                     <a-form-item label="角色">
-                        <a-radio-group v-model:value="currentRecord!.role">
+                        <a-select
+                            v-model:value="currentRecord!.role"
+                            show-search
+                            :options="options"
+                            placeholder="选择角色">
+                            <template #suffixIcon><meh-outlined class="ant-select-suffix" /></template>
+                        </a-select>
+                        <!-- <a-radio-group v-model:value="currentRecord!.role">
                             <a-radio-button value="admin">admin</a-radio-button>
                             <a-radio-button value="doctor">doctor</a-radio-button>
-                        </a-radio-group>
+                        </a-radio-group> -->
                     </a-form-item>
                 </a-form>
         </a-modal>
@@ -84,6 +91,8 @@ import { columns } from './option.ts';
 import { Page } from '@/interface/page';
 import { QueryForm } from '@/interface/queryForm';
 import { User } from '@/interface/user';
+import { Role } from '@/interface/role';
+import type { SelectProps } from 'ant-design-vue';
 import { get, put } from '@/utils/request';
 import {message as AntMessage} from 'ant-design-vue';
 
@@ -103,6 +112,8 @@ const data: { queryForm: QueryForm; query: string; total: number; FilteredData: 
     total: 0,
     FilteredData: [],
 });
+
+const options = ref<SelectProps['options']>([]);
 
 
 // 分页器配置
@@ -153,8 +164,8 @@ const updateEnabled = async (flag: boolean, record: User) => {
         componentDisabled.value = false;
     }
 };
-const commit = async() => {
-    const res =  await put('/api/editRole', {
+const commit = async () => {
+    const res = await put('/api/editRole', {
         username: currentRecord.value?.username,
         role: currentRecord.value?.role
     });
@@ -162,16 +173,29 @@ const commit = async() => {
     if (res.flag) {
         AntMessage.success("修改成功");
         close();
-    }    
-}
+    }
+};
 
 const close = () => {
     componentDisabled.value = true;
     getListData();
-}
+};
+const getList = async () => {
+    const res = await get<Page<Role>>("/api/getRoleList", {
+        current: 1,
+        size: 1000,
+    });
+    res.data.recordList.forEach((role) => {
+        options.value?.push({
+            value: role.roleName,
+            label: role.roleName,
+        });
+    });
+};
 
 onMounted(() => {
     getListData();
+    getList();
 });
 
 

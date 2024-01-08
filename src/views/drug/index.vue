@@ -56,7 +56,8 @@ import Dialog from './Dialog.vue';
 import confirm from 'ant-design-vue/es/modal/confirm';
 import {QueryForm} from '@/interface/queryForm'
 import { reactive, onMounted, ref, computed } from 'vue';
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
+import { message as AntMessage } from 'ant-design-vue';
 import { columns } from './option'
 import { Drug } from '@/interface/drug';
 import {formatToDateTime, formatToDate} from '@/utils/dateUtils'
@@ -102,12 +103,15 @@ const formatDate = (val: string, type: 'date' | 'time' = 'date') => {
 const addDrug = () => {
     isShow.value = true;
     selectedRecord.value = createNewDrug();
+    console.log(selectedRecord.value);
     flag.value = false;
 };
 
 // 开启弹窗，给子组件数据,修改数据
 const updateDrug = (record: Drug) => {
     selectedRecord.value = record;
+    selectedRecord.value.produceTime = dayjs(selectedRecord.value.produceTime);
+    selectedRecord.value.expireTime = dayjs(selectedRecord.value.expireTime);
     isShow.value = true;
     flag.value = true;
 
@@ -143,8 +147,11 @@ const remove = (record: Drug) => {
         okText: "确定",
         cancelText: "取消",
         onOk: async () => {
-            await del<string>('/api/deleteById', { id: record.id });
-            getListData();
+            const res = await del<string>('/api/deleteById', { id: record.id });
+            if (res.flag) {
+                AntMessage.success("删除成功");
+                getListData();
+            }
         },
         onCancel() { },
     });

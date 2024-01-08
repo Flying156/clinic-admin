@@ -16,16 +16,6 @@ const routes = [
         },
         children : [
             {
-                path : '/register',
-                name : 'Register',
-                meta : {
-                    title : '注册',
-                    keeyAlive : true,
-                    requireAuth : false
-                },
-                component : () => import('@/views/register/index.vue')
-            },
-            {
                 path : '/app/home',
                 name : 'Home',
                 meta : {
@@ -54,7 +44,7 @@ const routes = [
                 meta : {
                     title : '角色管理',
                     keeyAlive : true,
-                    icon : 'rili',
+                    icon : 'jiaoseguanli',
                     requireAuth : false
                 },
                 component : () => import('@/views/role/index.vue')
@@ -65,7 +55,7 @@ const routes = [
                 meta : {
                     title : '用户管理',
                     keeyAlive : true,
-                    icon : 'rili',
+                    icon : 'yonghuguanli',
                     requireAuth : false
                 },
                 component : () => import('@/views/user/index.vue')
@@ -77,7 +67,7 @@ const routes = [
                 meta : {
                     title : '开药记录',
                     keeyAlive : true,
-                    icon : 'rili',
+                    icon : 'xitongrizhi',
                     requireAuth : false
                 },
                 component : () => import('@/views/record/index.vue')
@@ -105,6 +95,17 @@ const routes = [
 
                 },
             },
+            {
+                path : '/sys/password',
+                name : 'password',
+                component : () => import('@/views/password/index.vue'),
+                meta : {
+                    title : '用户管理',
+                    keepAlive : true,
+                    breadcrumb : true,
+
+                },
+            },
         ]
     },
     {
@@ -116,6 +117,16 @@ const routes = [
             requireAuth : false
         },
         component : () => import('@/views/login/index.vue')
+    },
+    {
+        path : '/register',
+        name : 'Register',
+        meta : {
+            title : '注册',
+            keeyAlive : true,
+            requireAuth : false
+        },
+        component : () => import('@/views/register/index.vue')
     },
 
 ];
@@ -130,9 +141,9 @@ router.beforeEach((to, from, next) => {
     if (to.name === 'Login') {
         next();
     }
-
+    const store = useUserStore();
     // 如果用户没有 token 并且访问的不是登录页面，则重定向到登录页面
-    if (localStorage.getItem('authorization') === null && to.path !== '/login') {
+    if (store.getToken === null && to.path !== '/login') {
         next('/login');
     } else {
         // 否则继续导航

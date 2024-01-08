@@ -64,6 +64,7 @@ export const columns = [
         dataIndex : "key",
         align : "center",
         slots : {customRender : "name"}, //绑定插槽
+        fixed : 'right',
 
     },
 ];

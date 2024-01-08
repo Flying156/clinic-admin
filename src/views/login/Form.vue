@@ -26,13 +26,21 @@
           </template>
         </a-input>
       </a-form-item>
-      <a-form-item name="verCode" class="code-container">
-        <a-input   class="reset-input"
-          v-model:value="formModel.code"/>
-        <img alt="验证码" id="codeImg" :src="url.code">
+        <p class="text">请输入验证码</p>
+      <a-form-item name="verCode" class="code-container" >
+          <a-col style="width:200px  display: inline-block;">
+                <a-input class="reset-input" v-model:value="formModel.code" >
+                    <template #prefix>
+                        <!-- <lock-outlined class="icon" /> -->
+                        <Icon size="24px" type="shurumimadenglu" class="icon" />
+                    </template>
+                </a-input>
+                <img alt="验证码" id="codeImg" :src="url.code" @click="getImgUrl" style="vertical-align:middle;">
+            </a-col>
       </a-form-item>
         <a-form-item>
             <a-button html-type="submit" class="btn" :loading="loading" @click="login">立即登录</a-button>
+            <a-button html-type="submit" class="btn" :loading="loading" @click="register" style="margin-left:70px">立即注册</a-button>
         </a-form-item>
         </a-form>
     </div>
@@ -44,6 +52,7 @@
 import { ref, reactive, onMounted } from 'vue';
 import axiosInstance, { get } from '@/utils/request';
 import router from '@/router';
+import Icon from '@/components/Icon/index.vue';
 import { useUserStore } from '@/store/user';
 import {message as AntMessage} from 'ant-design-vue';
 
@@ -74,6 +83,10 @@ const getImgUrl = async () => {
     const response = await get<ImgModel>('/api/captcha');
     url.code = response.data.code;
     url.uuid = response.data.uuid;
+};
+const register = () => {
+    userStore.resetState();
+    router.replace("/register");
 }
 
 const userStore = useUserStore();
@@ -93,7 +106,7 @@ const login = async () => {
             }
         }).then((response) => {
             if (response.data.flag) {
-                localStorage.setItem("authorization", response.headers['authorization']);
+                userStore.setToken(response.headers['authorization']);
                 userStore.setUsername(data.username);
                 router.replace('/app');
                 AntMessage.success("登录成功");
@@ -112,7 +125,7 @@ onMounted(() => {
   .form_box {
     margin-top: 30px;
     .btn {
-      width: 100%;
+      width: 40%;
       height: 54px;
       background: linear-gradient(90deg, #00c3fd 0%, #3662f4 100%);
       border-radius: 6px;
@@ -161,11 +174,4 @@ onMounted(() => {
 
 
 }
-    .code-container {
-        display: flex; // 将容器变成内联 Flex 容器
-        align-items: center; // 垂直居中
-    }
-    #codeImg {
-        height: 50px; // 根据需要设置高度
-    }
 </style>

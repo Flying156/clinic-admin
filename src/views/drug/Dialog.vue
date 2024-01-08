@@ -13,7 +13,6 @@
                 v-model:value="record"
                 :disabled="componentDisabled"
                 style="max-width: 600px"
-                :rules="rules"
             >
             <a-form-item label="药品名称" name="name">
                 <a-input v-model:value="record.name"/>
@@ -62,6 +61,7 @@
 <script lang="ts" setup>
 import { ref, defineProps, defineEmits } from 'vue';
 import {Drug} from '@/interface/drug'
+import {message as AntMessage} from 'ant-design-vue';
 import { post, put } from '@/utils/request';
 // 是否可以填充数据
 const componentDisabled = ref(false);
@@ -78,26 +78,20 @@ const show = ref(true);
 // 传递上层组件
 const emit = defineEmits(['child-click']);
 
-
-const rules = {
-    name: [{ required: true, trigger: 'blur', message: '请输入药品名称' }],
-    price: [{ required: true, trigger: 'blur', message: '请输入价格' }],
-    manufacturer: [{ required: true, trigger: 'blur', message: '请输入制造商' }],
-    effect:[{ required: true, trigger: 'blur', message: '请输入药效' }]
-};
-
 // 提交修改
 const commit = async () => {
     if (props.isPost) {
         const res = await post('/api/updateDrug', record.value);
         if (res.flag) {
             show.value = false;
+            AntMessage.success("修改成功");
         }
         emit('child-click', show.value);
     } else {
         const res = await put('/api/addDrug', record.value);
         if (res.flag) {
             show.value = false;
+            AntMessage.success("添加成功");
         }
         emit('child-click', show.value);
     }

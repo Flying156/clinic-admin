@@ -67,6 +67,7 @@ interface OverStatic{
 const getOverData = async () => {
     const res = await get<OverStatic>("/api/overStatic");
     if (res.flag) {
+        data.value[0].value = res.data.doctorCount;
         data.value[1].value = res.data.drugCount;
         data.value[2].value = res.data.patientCount;
         data.value[3].value = res.data.revenue;

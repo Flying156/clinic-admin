@@ -11,7 +11,7 @@ const axiosInstance = axios.create({
 });
 axiosInstance.interceptors.request.use(
     (config: AxiosRequestConfig) => {
-        config.headers['Authorization'] = localStorage.getItem("authorization");
+        config.headers['Authorization'] = userStore.getToken;
         return config;
     },
     (error: AxiosError) => {

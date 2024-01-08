@@ -5,7 +5,7 @@
                 <a-col :span="7"  style="margin-right: -25px; ">
                     <a-input
                         v-model:value="data.query"
-                        placeholder="请输入用户名查询"
+                        placeholder="请输入病人姓名查询"
                          style="border-radius: 0px; "
                     ></a-input>
                 </a-col>

@@ -1,107 +1,42 @@
 <template>
-        <div class="form_box">
-        <a-form :model="formModel" :rules="rules">
-        <p class="text">请使用手机号注册</p>
-        <a-form-item name="username">
-            <a-input
-                class="reset-input"
-                v-model:value="formModel.username"
-            >
-                <template #prefix>
-                <!-- <user-outlined class="icon" type="user" /> -->
-                    <Icon size="24px" type="shoujihaodenglu" class="icon" />
-                </template>
-            </a-input>
-        </a-form-item>
-        <p class="text">请输入密码</p>
-      <a-form-item name="password">
-        <a-input
-          class="reset-input"
-          v-model:value="formModel.password"
-          type="password"
-        >
-          <template #prefix>
-            <!-- <lock-outlined class="icon" /> -->
-            <Icon size="24px" type="shurumimadenglu" class="icon" />
-          </template>
-        </a-input>
-      </a-form-item>
-        <a-form-item>
-            <a-button html-type="submit" class="btn" :loading="loading" @click="register">注册</a-button>
-        </a-form-item>
-        </a-form>
-    </div>
+  <div class="login-container rowCC">
+    <a-card class="login" :bordered="false" :body-style="{ width: '480px', padding: '30px 0' }">
+      <div class="login_right_container">
+        <div class="title_box">
+          <h2 class="title">管理系统</h2>
+        </div>
+        <!-- form -->
+        <login-form />
+      </div>
+    </a-card>
+  </div>
 </template>
-
 <script setup lang="ts">
-import { reactive, ref } from 'vue';
-import { put } from '@/utils/request';
-const loading = ref(false);
-
-const rules = {
-    username: [{ required: true, trigger: 'blur', message: '请输入手机号' }],
-    password: [{ required: true, trigger: 'blur', message: '请输入密码' }],
-};
-const formModel = reactive({
-    username: '',
-    password: ''
-});
-
-const register = () => {
-    put('/api/register', formModel);
-}
-
+  import LoginForm from './Form.vue';
 </script>
-
-<style lang="less">
-  .form_box {
-    margin-top: 30px;
-    .btn {
-      width: 100%;
-      height: 54px;
-      background: linear-gradient(90deg, #00c3fd 0%, #3662f4 100%);
-      border-radius: 6px;
-      color: #ffffff;
-      font-size: 20px;
-      &:hover {
-        opacity: 0.85;
-        border: none;
+<style lang="less" scoped>
+  .login-container {
+    width: 100vw;
+    height: 100vh;
+    background-image: linear-gradient(to right, #74ebd5 0%, #9face6 100%);
+    .login {
+      border-radius: 10px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
+      // background-image: linear-gradient(to top, #9795f0 0%, #fbc8d4 100%);
+      &_right {
+        padding-top: 80px;
+        &_container {
+          width: 360px;
+          margin: 0 auto;
+        }
       }
     }
-    .icon {
-      color: #666666;
-    }
-    .text {
-      font-size: 14px;
-      line-height: 20px;
-      color: #999999;
-      letter-spacing: 1.1px;
-      margin-bottom: 10px;
-    }
-    .gray_text {
-      font-size: 12px;
-      color: #666666;
-    }
-    .reset_checkbox {
-      .ant-checkbox-inner {
-        border-radius: 50%;
-      }
-      & > span:last-child {
-        font-size: 12px;
-        color: #666666;
-      }
-    }
-    .reset-input {
-      height: 50px;
-      line-height: 50px;
-      border: 1px solid #707070;
-      border-radius: 6px;
-    }
-    .copyright {
-      margin-top: 20px;
-      font-size: 12px;
-      color: #999999;
-      opacity: 0.85;
+  }
+  .title_box {
+    display: flex;
+    .title {
+      font-size: 22px;
+      color: #000000;
     }
   }
 </style>

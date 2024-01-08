@@ -32,6 +32,7 @@ export const columns = [
         dataIndex : "operation",
         align : "center",
         width : '300px',
+        fixed : 'right',
 
     },
 ];

@@ -3,7 +3,7 @@
     <div class="title font18">用户信息</div>
     <div class="content">
       <div class="content_left">
-        <a-avatar :size="100" :src="formDate.avatar" />
+            <a-avatar :size="100" :src="formDate.avatar" />
       </div>
       <div class="content_right">
         <a-form v-model:value="formDate">
@@ -11,7 +11,7 @@
                 <a-input class="input" v-model:value="formDate.account"/>
             </a-form-item>
             <a-form-item label="角色">
-                {{ formDate.role }}
+                <a-tag color="red">{{ formDate.role }}</a-tag>
             </a-form-item>
             <a-form-item label="性别" >
                 <a-radio-group v-model:value="formDate.gender">
@@ -32,7 +32,7 @@
 <script setup lang="ts">
 import { User } from '@/interface/user';
 import { useUserStore } from '@/store/user';
-import { get, put } from '@/utils/request';
+import { get, post, put } from '@/utils/request';
 import { onMounted } from 'vue';
 import { ref, reactive } from 'vue';
 
@@ -71,7 +71,7 @@ const updateDetail = async () => {
     });
 
     getUserDetail();
-}
+};
 
 onMounted(() => {
     getUserDetail();
